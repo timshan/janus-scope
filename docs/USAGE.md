@@ -1,6 +1,6 @@
 # JanusScope 使用說明
 
-> **目前狀態：Portable Runtime Bootstrap 與 Desktop Chromium 啟動已可使用；Android Mobile、截圖、GUI 與 updater 尚未實作。以下未完成段落不應視為已提供。**
+> **目前狀態：Portable Runtime Bootstrap、Desktop 與 Android Mobile 瀏覽模式已可使用；截圖、GUI 與 updater 尚未實作。以下未完成段落不應視為已提供。**
 
 ## 適用對象
 
@@ -53,30 +53,39 @@ scripts\self-check.bat
 start.bat
 ```
 
-JanusScope 會先檢查 repo-local Node.js、local Playwright dependency 與 `runtime\browsers` 內的 Playwright-managed Chromium，並輸出 JanusScope、Node.js、Playwright 與 Chromium revision／版本資訊。Runtime 不完整時會提示執行 `setup.bat` 並以非零 exit code 結束，不會改用系統 Node.js、Chrome 或 Edge。
+JanusScope 會顯示：
 
-檢查通過後會以 **Desktop** 模式開啟 headed Chromium 視窗。你可以直接在 Chromium 網址列輸入或貼上網址，並正常操作網站。關閉最後一個 JanusScope Chromium 視窗後，launcher process 會正常結束。
+```text
+請選擇瀏覽模式：
+[1] Desktop
+[2] Android 手機
+```
 
-Desktop profile 存放於 repo-local `profile\desktop\`，不會進 Git。若 profile 無法寫入或執行遭端點安全政策阻擋，程式會清楚失敗；不要停用或繞過安全政策。
+輸入 `1` 或 `2` 後按 Enter。無效或空白輸入會清楚失敗，不會默默切換到另一模式。需要自動化驗證時，也可以明確執行 `start.bat desktop` 或 `start.bat mobile`；一般使用者不必記這些參數。
+
+JanusScope 會檢查 repo-local Node.js、local Playwright dependency 與 `runtime\browsers` 內的 Playwright-managed Chromium，並輸出 runtime 版本。Runtime 不完整時會提示執行 `setup.bat` 並以非零 exit code 結束，不會改用系統 Node.js、Chrome 或 Edge。
+
+關閉最後一個 JanusScope Chromium 視窗後，launcher process 會正常結束。若 profile 無法寫入或執行遭端點安全政策阻擋，程式會清楚失敗；不要停用或繞過安全政策。
 
 ## 瀏覽模式
 
 ### Desktop
 
-Desktop Chromium 已提供。它使用 Playwright 與 setup 準備的 repo-local Chromium，維持一般桌面預設行為，不加入 fingerprint randomization 或 anti-detect 修改。
+Desktop 使用一般 headed Chromium desktop context，state 存放於 repo-local `profile\desktop\`。它不套用 mobile User-Agent、viewport、touch 或 device descriptor。
 
 ### Android Mobile
 
-Android Mobile 尚未實作。本 Issue 不會建立手機 User-Agent、mobile viewport、touch profile 或模式選單；請等待後續 Issue。
+Android 手機模式使用固定 Playwright `1.62.1` 提供的官方 `Pixel 7` descriptor，包含 Android／Chrome-style User-Agent、412 × 839 viewport、412 × 915 screen、2.625 DPR、`isMobile` 與 touch capability。State 獨立存放於 repo-local `profile\android-mobile\`，不與 Desktop 共用 Cookie 或 local storage。
+
+這是 Playwright／Chromium 的 Android-style browser emulation，**不等於真正的 Android 手機**、Android Emulator 或完整作業系統模擬，也不保證網站會把它視為實體手機。技術設定與差異驗證方式請見 [`PROFILES.md`](PROFILES.md)。
 
 ## 開啟網站
 
-目前 Desktop 操作方式：
-
 1. 執行 `start.bat`。
-2. 確認訊息顯示 `[模式] Desktop` 與 runtime 版本。
-3. 在開啟的 Chromium 視窗中輸入／貼上網址。
-4. 正常操作網站。
+2. 選擇 Desktop 或 Android 手機。
+3. 確認訊息顯示目前模式、profile path 與 runtime 版本。
+4. 在開啟的 Chromium 視窗中輸入／貼上網址。
+5. 正常操作網站。
 
 不需要自行開啟 Chrome DevTools 修改 User-Agent。
 

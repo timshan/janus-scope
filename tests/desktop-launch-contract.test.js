@@ -30,7 +30,7 @@ test('start script 僅使用 repo-local Node.js 與 browser path', () => {
   assert.match(source, /runtime\\node\\node\.exe/i);
   assert.match(source, /PLAYWRIGHT_BROWSERS_PATH/i);
   assert.match(source, /runtime\\browsers/i);
-  assert.match(source, /src\\launcher\\desktop\.js/i);
+  assert.match(source, /src\\launcher\\start\.js/i);
   assert.match(source, /請先執行 setup\.bat/);
   assert.doesNotMatch(source, /\bwhere\s+(?:node|chrome|msedge)/i);
   assert.doesNotMatch(source, /Program Files|Google\\Chrome|Microsoft\\Edge/i);
@@ -51,16 +51,20 @@ test('runtime validator 綁定既有 runtime contract 並輸出完整版本資�
   assert.doesNotMatch(source, /channel\s*:/i);
 });
 
-test('Desktop launcher 使用 headed persistent context 並等待正常關閉', () => {
-  const source = read('src/launcher/desktop.js');
-  assert.match(source, /launchPersistentContext\(/);
-  assert.match(source, /headless:\s*false/);
-  assert.match(source, /profile[\s\S]*desktop/);
-  assert.match(source, /about:blank/);
-  assert.match(source, /waitForEvent\(['"]close['"]\)/);
-  assert.match(source, /browser\(\)\.version\(\)/);
-  assert.match(source, /--validation-auto-close-ms=/);
-  assert.doesNotMatch(source, /devices\[|isMobile|hasTouch|userAgent|screenshot\(|update\.bat/i);
+test('Desktop launcher 維持 headed persistent context、獨立 profile 與正常關閉', () => {
+  const desktop = read('src/launcher/desktop.js');
+  const session = read('src/launcher/browser-session.js');
+  assert.match(desktop, /launchPersistentSession\(/);
+  assert.match(desktop, /profileDirectory:\s*['"]desktop['"]/);
+  assert.match(desktop, /contextOptions:\s*\{\}/);
+  assert.match(session, /launchPersistentContext\(/);
+  assert.match(session, /headless:\s*false/);
+  assert.match(session, /about:blank/);
+  assert.match(session, /waitForEvent\(['"]close['"]\)/);
+  assert.match(session, /browser\(\)\.version\(\)/);
+  assert.match(session, /--validation-auto-close-ms=/);
+  assert.doesNotMatch(desktop, /devices\[|isMobile|hasTouch|userAgent/i);
+  assert.doesNotMatch(desktop + session, /screenshot\(|update\.bat/i);
 });
 
 test('validation auto-close 參數只接受有界正整數', () => {
@@ -93,14 +97,15 @@ test('Issue #2 launcher 不含提權、持久系統修改或超出範圍功能',
   }
 });
 
-test('使用文件只把 Desktop 標示為已提供', () => {
+test('使用文件標示 Desktop 與 Android Mobile，並保留後續範圍', () => {
   const readme = read('README.md');
   const usage = read('docs/USAGE.md');
-  assert.match(readme, /Desktop Chromium 啟動已提供/);
+  assert.match(readme, /Desktop 與 Android Mobile 瀏覽模式已提供/);
   assert.match(usage, /start\.bat/);
-  assert.match(usage, /Desktop Chromium/);
+  assert.match(usage, /Desktop/);
+  assert.match(usage, /Android 手機/);
   assert.match(usage, /關閉最後一個 JanusScope Chromium 視窗/);
-  assert.match(usage, /Android Mobile[\s\S]*尚未實作/);
+  assert.match(usage, /不等於真正的 Android 手機/);
   assert.match(usage, /截圖[\s\S]*尚未實作/);
 });
 

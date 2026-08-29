@@ -1,6 +1,6 @@
 # Portable Runtime 說明
 
-本文件只說明 GitHub Issue #1 已納入的 Windows x64 portable bootstrap。Desktop／Mobile 啟動、截圖、GUI 與 updater 尚未實作。
+本文件只說明 GitHub Issue #1 納入的 Windows x64 portable bootstrap。Desktop／Android Mobile 啟動與 client profile 請見 [`PROFILES.md`](PROFILES.md)；截圖、GUI 與 updater 尚未實作。
 
 ## 執行方式
 

@@ -92,8 +92,9 @@ function validateRuntime(options = {}) {
   }
 
   let chromium;
+  let devices;
   try {
-    ({ chromium } = require(path.join(repoRoot, 'node_modules', 'playwright')));
+    ({ chromium, devices } = require(path.join(repoRoot, 'node_modules', 'playwright')));
   } catch (error) {
     throw new RuntimeValidationError(`Playwright local dependency 無法載入（${error.message}）`);
   }
@@ -109,6 +110,7 @@ function validateRuntime(options = {}) {
     runtimeRoot,
     browserRoot: expectedBrowserRoot,
     chromium,
+    devices,
     chromiumExecutable: executable,
     chromiumRevision: extractChromiumRevision(executable, expectedBrowserRoot),
     janusScopeVersion: janusPackage.version,
