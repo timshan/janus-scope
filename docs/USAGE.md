@@ -1,6 +1,6 @@
 # JanusScope 使用說明
 
-> **目前狀態：JanusScope 尚在開發初期，本文件先定義 MVP 完成後的一般使用流程。若目前 repository 尚未包含對應 script 或 Release，請勿把本文件中的預定操作視為已完成。**
+> **目前狀態：Portable Runtime Bootstrap 已可使用；Desktop／Mobile 啟動、截圖、GUI 與 updater 尚未實作。以下未完成段落仍是 MVP 預定流程，不應視為已提供。**
 
 ## 適用對象
 
@@ -29,17 +29,21 @@ D:\Tools\JanusScope\
 
 ## 第一次使用
 
-MVP 完成後，第一次使用預計執行：
+第一次使用請執行：
 
 ```text
 setup.bat
 ```
 
-Setup 會在 JanusScope 自己的資料夾內準備必要元件，包括 portable Node.js、Playwright 與 Playwright 管理的 Chromium。
+Setup 會在 JanusScope 自己的資料夾內準備 portable Node.js、local Playwright dependency 與 Playwright 管理的 Chromium。正常情況下不會要求 Administrator 權限或跳出 UAC 視窗。
 
-正常情況下，不應跳出要求 Administrator 權限的 UAC 視窗。
+完成後可重複執行：
 
-如果 Trend Micro XDR、Application Control、Proxy 或其他機關安全政策阻擋下載或執行，JanusScope 應顯示錯誤訊息並停止。**不要停用或繞過端點安全軟體。**
+```text
+scripts\self-check.bat
+```
+
+如果 Trend Micro XDR、Application Control、Proxy 或其他機關安全政策阻擋下載或執行，JanusScope 會顯示錯誤並停止。**不要停用或繞過端點安全軟體。**固定版本、下載來源與完整性驗證方式請見 [`RUNTIME.md`](RUNTIME.md)。
 
 ## 平常啟動
 
@@ -117,7 +121,7 @@ update.bat
 3. 是否出現 Trend Micro XDR、Windows Application Control 或其他資安軟體通知。
 4. 公司 Proxy 或網路政策是否阻擋必要下載。
 
-若 JanusScope 顯示 runtime 缺失，依未來正式版本提供的修復／setup 指示操作。不要自行把不明來源的 `node.exe`、`chrome.exe` 或 DLL 複製進 runtime。
+若 JanusScope 顯示 runtime 缺失，請執行 `setup.bat`；需要單獨重複驗證時可執行 `scripts\self-check.bat`。不要自行把不明來源的 `node.exe`、`chrome.exe` 或 DLL 複製進 runtime。
 
 ## 如何移除
 

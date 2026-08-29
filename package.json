@@ -1,0 +1,16 @@
+{
+  "name": "janus-scope",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JanusScope 可攜式網站檢視工具",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  },
+  "engines": {
+    "node": "24.20.0"
+  }
+}
