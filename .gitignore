@@ -1,0 +1,26 @@
+# Portable runtime and downloaded dependencies
+runtime/
+node_modules/
+
+# User/browser state
+profile/
+profiles-local/
+
+# Captures and local logs
+screenshots/
+logs/
+
+# Playwright output
+playwright-report/
+test-results/
+
+# Environment/local configuration
+.env
+.env.*
+*.local.ini
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
