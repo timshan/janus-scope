@@ -1,6 +1,6 @@
 # JanusScope 使用說明
 
-> **目前狀態：Portable Runtime Bootstrap 已可使用；Desktop／Mobile 啟動、截圖、GUI 與 updater 尚未實作。以下未完成段落仍是 MVP 預定流程，不應視為已提供。**
+> **目前狀態：Portable Runtime Bootstrap 與 Desktop Chromium 啟動已可使用；Android Mobile、截圖、GUI 與 updater 尚未實作。以下未完成段落不應視為已提供。**
 
 ## 適用對象
 
@@ -47,38 +47,41 @@ scripts\self-check.bat
 
 ## 平常啟動
 
-完成 setup 後，平常預計執行：
+完成 setup 後，執行：
 
 ```text
 start.bat
 ```
 
-JanusScope 會先檢查本機 runtime 是否完整，再讓你選擇瀏覽模式。
+JanusScope 會先檢查 repo-local Node.js、local Playwright dependency 與 `runtime\browsers` 內的 Playwright-managed Chromium，並輸出 JanusScope、Node.js、Playwright 與 Chromium revision／版本資訊。Runtime 不完整時會提示執行 `setup.bat` 並以非零 exit code 結束，不會改用系統 Node.js、Chrome 或 Edge。
+
+檢查通過後會以 **Desktop** 模式開啟 headed Chromium 視窗。你可以直接在 Chromium 網址列輸入或貼上網址，並正常操作網站。關閉最後一個 JanusScope Chromium 視窗後，launcher process 會正常結束。
+
+Desktop profile 存放於 repo-local `profile\desktop\`，不會進 Git。若 profile 無法寫入或執行遭端點安全政策阻擋，程式會清楚失敗；不要停用或繞過安全政策。
 
 ## 瀏覽模式
 
 ### Desktop
 
-用一般桌面 Chromium 環境開啟網站，可用來確認網站在桌面瀏覽器下的正常呈現內容。
+Desktop Chromium 已提供。它使用 Playwright 與 setup 準備的 repo-local Chromium，維持一般桌面預設行為，不加入 fingerprint randomization 或 anti-detect 修改。
 
 ### Android Mobile
 
-用 Playwright 設定 Android-style 手機瀏覽環境，包括手機 User-Agent、畫面大小、觸控能力與其他 mobile context 設定。
-
-這是瀏覽器環境模擬，不等於一支真正的 Android 手機。如果未來遇到只在實體 Android / Android Emulator 顯示的內容，會由後續版本另外處理。
+Android Mobile 尚未實作。本 Issue 不會建立手機 User-Agent、mobile viewport、touch profile 或模式選單；請等待後續 Issue。
 
 ## 開啟網站
 
-MVP 的最終介面仍在實作中，但操作原則會維持簡單：
+目前 Desktop 操作方式：
 
-1. 選擇 Desktop 或 Android Mobile。
-2. 輸入／貼上網址，或在開啟的 Chromium 視窗中輸入網址。
-3. 正常操作網站。
-4. 需要保存畫面時使用 JanusScope 截圖功能。
+1. 執行 `start.bat`。
+2. 確認訊息顯示 `[模式] Desktop` 與 runtime 版本。
+3. 在開啟的 Chromium 視窗中輸入／貼上網址。
+4. 正常操作網站。
 
 不需要自行開啟 Chrome DevTools 修改 User-Agent。
 
 ## 截圖
+截圖尚未實作；目前請勿把下列預定介面視為已提供。
 
 截圖預計儲存在：
 
@@ -101,6 +104,7 @@ screenshots\
 `screenshots/` 不會自動上傳 GitHub。
 
 ## 更新瀏覽器元件
+Updater 尚未實作；目前請勿執行尚不存在的 `update.bat`。
 
 瀏覽器與 Playwright 不會在每次啟動時強制更新。
 
