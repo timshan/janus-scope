@@ -6,7 +6,7 @@ set "SCRIPT_DIR=%~dp0"
 for %%I in ("%SCRIPT_DIR%..") do set "REPO_ROOT=%%~fI"
 set "NODE_EXE=%REPO_ROOT%\runtime\node\node.exe"
 set "BROWSER_DIR=%REPO_ROOT%\runtime\browsers"
-set "LAUNCHER=%REPO_ROOT%\src\launcher\desktop.js"
+set "LAUNCHER=%REPO_ROOT%\src\launcher\start.js"
 
 if not exist "%NODE_EXE%" (
   echo [錯誤] 找不到 JanusScope repo-local Node.js：%NODE_EXE%
@@ -22,7 +22,7 @@ if errorlevel 1 (
 )
 
 if not exist "%LAUNCHER%" (
-  echo [錯誤] 找不到 JanusScope Desktop launcher：%LAUNCHER%
+  echo [錯誤] 找不到 JanusScope 模式選擇／啟動程式：%LAUNCHER%
   echo [提示] 請重新取得完整 JanusScope 程式檔案。
   exit /b 1
 )
@@ -33,7 +33,7 @@ set "PLAYWRIGHT_BROWSERS_PATH=%BROWSER_DIR%"
 "%NODE_EXE%" "%LAUNCHER%" %*
 set "LAUNCH_EXIT=%ERRORLEVEL%"
 if not "%LAUNCH_EXIT%"=="0" (
-  echo [錯誤] JanusScope Desktop 啟動未完成，exit code：%LAUNCH_EXIT%
+  echo [錯誤] JanusScope 瀏覽模式啟動未完成，exit code：%LAUNCH_EXIT%
   exit /b %LAUNCH_EXIT%
 )
 exit /b 0
