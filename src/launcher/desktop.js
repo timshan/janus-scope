@@ -16,6 +16,8 @@ async function launchDesktop(options = {}) {
     runtimeOptions: options.runtimeOptions,
     autoCloseMs: options.autoCloseMs ?? null,
     probeClientProfile: options.probeClientProfile ?? false,
+    enableScreenshotConsole: options.enableScreenshotConsole ?? true,
+    sessionTask: options.sessionTask ?? null,
   });
 }
 

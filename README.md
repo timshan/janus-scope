@@ -2,7 +2,7 @@
 
 JanusScope 是一套給 Windows 電腦使用的可攜式網站檢視工具，讓使用者可以用 **Desktop** 與 **Android Mobile** 兩種瀏覽環境開啟同一網站，查看網站是否因裝置類型而呈現不同內容，並在需要時直接保存截圖。
 
-> **目前狀態：Portable Runtime Bootstrap、Desktop 與 Android Mobile 瀏覽模式已提供；截圖、GUI 與 updater 尚未實作。**
+> **目前狀態：Portable Runtime Bootstrap、Desktop／Android Mobile 瀏覽模式與 viewport 截圖已提供；GUI 與 updater 尚未實作。**
 
 ## 為什麼需要 JanusScope
 
@@ -22,16 +22,19 @@ JanusScope 是一套給 Windows 電腦使用的可攜式網站檢視工具，讓
 
 ## 使用方式與目前完成範圍
 
-Issue #1、#2 與 #5 已提供的 Windows x64 流程：
+Issue #1、#2、#5 與 #8 已提供的 Windows x64 流程：
 
 1. 在一般使用者可寫入的資料夾取得 JanusScope。
 2. 執行 `setup.bat` 準備 repo-local Node.js、Playwright 與 Playwright-managed Chromium。
 3. 執行 `start.bat`，在台灣華語選單選擇 `[1] Desktop` 或 `[2] Android 手機`。
 4. JanusScope 完成 runtime 檢查後，以獨立的 repo-local profile 啟動所選 headed Chromium 模式。
-5. 在 Chromium 網址列輸入網址並正常瀏覽；關閉最後一個 JanusScope Chromium 視窗後程式會結束。
-6. 需要單獨重複檢查 runtime 時，執行 `scripts\self-check.bat`；需要比較兩個 client profile 時，執行 `scripts\validate-profiles.bat`。
+5. 在 Chromium 網址列輸入網址並正常瀏覽。需要保存目前畫面時，切回 launcher console，輸入 `s` 後按 Enter。
+6. 成功訊息會指出 `screenshots\YYYY-MM-DD\時間_site-mode.png`；檔名中的 mode 是 `desktop` 或 `android-mobile`，快速連續截圖不會覆寫。
+7. 關閉最後一個 JanusScope Chromium 視窗後程式會結束。需要單獨檢查 runtime 或 client profile 時，可執行 `scripts\self-check.bat` 或 `scripts\validate-profiles.bat`。
 
-Android Mobile 是 Playwright／Chromium 的 Android-style browser emulation，不等於真正的 Android 手機。截圖與 `update.bat` 仍屬後續 Issue 範圍，尚未提供。
+Android Mobile 是 Playwright／Chromium 的 Android-style browser emulation，不等於真正的 Android 手機。截圖使用同一個 browsing session 的 Playwright `page.screenshot()` 保存目前 viewport，不會建立第二套 browser；`update.bat` 仍屬後續 Issue 範圍。
+
+截圖只供方便保存畫面，不宣稱具有數位鑑識或法律證據效力。畫面可能包含敏感資訊；請依工作規範保管，**不要把真實案件截圖 commit 到 Public repository**。
 
 ## 不做的事情
 

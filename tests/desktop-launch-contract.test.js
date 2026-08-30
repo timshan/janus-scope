@@ -64,7 +64,8 @@ test('Desktop launcher 維持 headed persistent context、獨立 profile 與正�
   assert.match(session, /browser\(\)\.version\(\)/);
   assert.match(session, /--validation-auto-close-ms=/);
   assert.doesNotMatch(desktop, /devices\[|isMobile|hasTouch|userAgent/i);
-  assert.doesNotMatch(desktop + session, /screenshot\(|update\.bat/i);
+  assert.match(session, /startScreenshotConsole/);
+  assert.doesNotMatch(desktop + session, /update\.bat/i);
 });
 
 test('validation auto-close 參數只接受有界正整數', () => {
@@ -97,16 +98,17 @@ test('Issue #2 launcher 不含提權、持久系統修改或超出範圍功能',
   }
 });
 
-test('使用文件標示 Desktop 與 Android Mobile，並保留後續範圍', () => {
+test('使用文件標示 Desktop、Android Mobile 與 screenshot 操作', () => {
   const readme = read('README.md');
   const usage = read('docs/USAGE.md');
-  assert.match(readme, /Desktop 與 Android Mobile 瀏覽模式已提供/);
+  assert.match(readme, /Desktop／Android Mobile 瀏覽模式與 viewport 截圖已提供/);
   assert.match(usage, /start\.bat/);
   assert.match(usage, /Desktop/);
   assert.match(usage, /Android 手機/);
   assert.match(usage, /關閉最後一個 JanusScope Chromium 視窗/);
   assert.match(usage, /不等於真正的 Android 手機/);
-  assert.match(usage, /截圖[\s\S]*尚未實作/);
+  assert.match(usage, /輸入小寫 `s` 後按 Enter/);
+  assert.doesNotMatch(usage, /截圖尚未實作/);
 });
 
 test('Issue #2 batch files 是無 BOM 的 CRLF', () => {

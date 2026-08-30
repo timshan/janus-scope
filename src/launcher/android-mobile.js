@@ -17,6 +17,8 @@ async function launchAndroidMobile(options = {}) {
     contextOptions: profile.contextOptions,
     autoCloseMs: options.autoCloseMs ?? null,
     probeClientProfile: options.probeClientProfile ?? false,
+    enableScreenshotConsole: options.enableScreenshotConsole ?? true,
+    sessionTask: options.sessionTask ?? null,
   });
 }
 

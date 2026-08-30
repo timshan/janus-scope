@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { validateRuntime } = require('../runtime/validate-runtime.js');
+const { startScreenshotConsole } = require('../screenshot/screenshot-console.js');
 
 const AUTO_CLOSE_ARGUMENT = '--validation-auto-close-ms=';
 const CLIENT_PROFILE_ARGUMENT = '--validation-client-profile';
@@ -71,6 +72,8 @@ async function launchPersistentSession(options) {
     runtimeOptions,
     autoCloseMs = null,
     probeClientProfile = false,
+    enableScreenshotConsole = true,
+    sessionTask = null,
   } = options;
 
   const runtime = providedRuntime || validateRuntime(runtimeOptions);
@@ -91,6 +94,7 @@ async function launchPersistentSession(options) {
   let context;
   let contextClosePromise;
   let autoCloseTimer;
+  let screenshotConsole;
   let contextClosed = false;
   const closeForSignal = () => {
     if (context && !contextClosed) void context.close().catch(() => {});
@@ -118,6 +122,10 @@ async function launchPersistentSession(options) {
     console.log(`[通過] Chromium ${chromiumVersion} 已以 headed ${label} 模式啟動。`);
     if (clientProfile) printClientProfile(mode, profilePath, clientProfile);
     console.log('[提示] 請在 Chromium 網址列輸入網址；關閉最後一個 JanusScope Chromium 視窗後程式會結束。');
+    if (enableScreenshotConsole) {
+      screenshotConsole = startScreenshotConsole({ context, mode, repoRoot: runtime.repoRoot });
+    }
+    if (sessionTask) await sessionTask({ context, page, mode, repoRoot: runtime.repoRoot });
 
     if (autoCloseMs !== null) {
       console.log(`[驗證] ${autoCloseMs} 毫秒後自動關閉 Chromium。`);
@@ -127,6 +135,7 @@ async function launchPersistentSession(options) {
     }
 
     await contextClosePromise;
+    if (screenshotConsole) await screenshotConsole.stop();
     console.log(`[完成] ${label} Chromium 已關閉，JanusScope process 正常結束。`);
 
     return {
@@ -139,6 +148,7 @@ async function launchPersistentSession(options) {
       profilePath,
     };
   } finally {
+    if (screenshotConsole) await screenshotConsole.stop();
     if (autoCloseTimer) clearTimeout(autoCloseTimer);
     process.removeListener('SIGINT', closeForSignal);
     process.removeListener('SIGTERM', closeForSignal);
