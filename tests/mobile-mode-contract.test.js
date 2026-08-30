@@ -153,7 +153,7 @@ test('Issue #5 不加入禁止或後續功能', () => {
     /\bHKLM\b/i,
     /New-Service|sc(?:\.exe)?\s+create/i,
     /npm(?:\.cmd)?\s+(?:install|i).*(?:--global|-g\b)/i,
-    /screenshot\(|update\.bat|proxy|stealth|fingerprint|anti-detect|CAPTCHA/i,
+    /update\.bat|proxy|stealth|fingerprint|anti-detect|CAPTCHA/i,
     /DEVICE_DESCRIPTOR_NAME\s*=\s*['"]iPhone|webkit\.launch|firefox\.launch/i,
   ]) {
     assert.doesNotMatch(combined, forbidden);
@@ -171,7 +171,7 @@ test('文件記錄 descriptor、模式切換、差異與邊界', () => {
   assert.match(profiles, /2\.625/);
   assert.match(profiles, /\| `isMobile` \| `true` \|/);
   assert.match(profiles, /\| `hasTouch` \| `true` \|/);
-  assert.match(readme, /Desktop 與 Android Mobile 瀏覽模式已提供/);
+  assert.match(readme, /Desktop／Android Mobile 瀏覽模式與 viewport 截圖已提供/);
   assert.match(usage, /\[1\] Desktop/);
   assert.match(usage, /\[2\] Android 手機/);
   assert.match(usage, /不等於真正的 Android 手機/);

@@ -1,6 +1,6 @@
 # JanusScope 使用說明
 
-> **目前狀態：Portable Runtime Bootstrap、Desktop 與 Android Mobile 瀏覽模式已可使用；截圖、GUI 與 updater 尚未實作。以下未完成段落不應視為已提供。**
+> **目前狀態：Portable Runtime Bootstrap、Desktop／Android Mobile 瀏覽模式與 viewport 截圖已可使用；GUI 與 updater 尚未實作。**
 
 ## 適用對象
 
@@ -90,27 +90,29 @@ Android 手機模式使用固定 Playwright `1.62.1` 提供的官方 `Pixel 7` d
 不需要自行開啟 Chrome DevTools 修改 User-Agent。
 
 ## 截圖
-截圖尚未實作；目前請勿把下列預定介面視為已提供。
 
-截圖預計儲存在：
-
-```text
-screenshots\
-```
-
-檔名會盡量包含：
-
-- 截圖時間
-- 網站 host / domain
-- Desktop 或 Mobile 模式
-
-例如：
+1. 保持 JanusScope Chromium 視窗開啟，先切到要保存的分頁。
+2. 切回啟動 JanusScope 的 launcher console。
+3. 輸入小寫 `s` 後按 Enter。
+4. 成功時會顯示實際的 repo-local 路徑，例如：
 
 ```text
-20260829-201530_example.com_mobile.png
+[截圖] 已儲存：screenshots\2026-08-31\231530123_example.com_android-mobile.png
 ```
 
-`screenshots/` 不會自動上傳 GitHub。
+這個 console 命令不需要 GUI framework，也不會在一般網站內註冊可能衝突的快捷鍵。JanusScope 會從**既有 Desktop 或 Android Mobile Playwright session**選擇目前可見的作用中分頁，使用 Playwright 保存目前 viewport PNG；不會為截圖另開 browser context、切換 profile 或建立第二套擷取工具。
+
+截圖只會放在 Git ignored 的：
+
+```text
+screenshots\YYYY-MM-DD\
+```
+
+檔名依序包含毫秒時間、Windows 安全化的 hostname／site identifier，以及 `desktop` 或 `android-mobile`。`about:blank` 等沒有 hostname 的頁面也會取得安全名稱；同一毫秒連續截圖時會加上序號，不會覆寫既有檔案。使用者不需自行輸入檔名。
+
+失敗時 console 會顯示 `[截圖錯誤]` 與原因，browser session 仍會繼續執行。JanusScope 不會 fallback 到 `%TEMP%`、Desktop、Documents 或 repository 外位置；若資料夾權限或資安政策阻擋，請依錯誤處理，不要繞過安全機制。
+
+截圖是方便保存畫面的功能，**不宣稱具有數位鑑識、chain of custody 或法律證據效力**。PNG 可能含有畫面上的帳號、個資或案件內容，請依工作規範管理；不要把真實工作截圖 commit 到 Public repository。JanusScope 不會因本功能預設蒐集 HAR、trace、HTML、Cookie、Token、Authorization header 或 request／response body。
 
 ## 更新瀏覽器元件
 Updater 尚未實作；目前請勿執行尚不存在的 `update.bat`。
@@ -144,7 +146,7 @@ JanusScope 採可攜式設計。正常情況下，在所有 JanusScope 視窗都
 
 ## 安全注意事項
 
-- 不要把帳號密碼、Cookie、Token 或其他敏感資料提交到公開 GitHub repository。
+- 不要把帳號密碼、Cookie、Token、真實工作截圖或其他敏感資料提交到公開 GitHub repository。
 - 不要為了讓 JanusScope 執行而關閉 Trend Micro XDR / EDR 或防毒軟體。
 - 如果機關資安政策禁止某個元件執行，應交由管理單位確認，而不是嘗試規避管制。
 
